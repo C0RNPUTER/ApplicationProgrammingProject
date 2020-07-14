@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// 슨키마
+// 스키마
 const WordSchema = new mongoose.Schema({
     text: {
         type: String,
