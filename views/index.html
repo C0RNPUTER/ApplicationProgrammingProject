@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+    <title>Wordlist</title>
+</head>
+<body>
+    <div class = title>
+        📕CatchMind Word
+        <div id = chmod onclick="location.href='/category'">
+            All Category
+        </div>
+    </div>
+    <form id="createWord">
+        <div class="inputWord">
+            <textarea class = "add" id="text" type="text" placeholder="추가할 단어를 적어주세요" cols="20"></textarea>
+        </div>
+        <div class="inputWord">
+            <textarea class = "add-1" id="category" type="text" placeholder="단어의 카테고리를 적어주세요" cols="20"></textarea>
+            <button type = "submit" class="submit" onclick="location.reload">등록</button>
+        </div>
+    </form>
+    
+    <div class = wordlist>
+        <% result.forEach(word => { %>
+            <p class = words><%=word.text%></p>
+        <% }) %>
+    </div>
+    <script>
+        function checkSlash(str){
+            if(str.indexOf('/')!=-1){
+                return true;
+            }
+            else
+                return false;            
+        }
+        $(function () {
+            $("#createWord").submit((event)=>{
+                event.preventDefault();
+                const text = $("#text").val();
+                const category = $("#category").val();
+                if(!checkSlash(text) && !checkSlash(category)){
+                    $.ajax({
+                        url: "/word/",
+                        type: "POST",
+                        data: {text, category},
+                    }).done(() => {
+                        location.reload();
+                    }).fail((request, status, error)=>{
+                        alert(request.responseText);
+                    });
+                }
+                else
+                    alert("Stop Using Slash");
+            })
+            $("p").click((event)=>{
+                const result = confirm(event.target.innerText+" 를 삭제하시겠습니까?");
+                if(result){
+                    $.ajax({
+                        url: "/word/"+event.target.innerText,
+                        type: "DELETE"
+                    }).done(() => {
+                        console.log("sdf");
+                        location.reload();
+                    }).fail((request, status, error)=>{
+                        alert(request.responseText);
+                    })
+                }
+            })
+        })
+    </script>
+</body>
+</html>

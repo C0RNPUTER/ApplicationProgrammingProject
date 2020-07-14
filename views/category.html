@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/index.css">
+    <title>Wordlist</title>
+    </head>
+<body>
+    <div class = title>
+        📕CatchMind Word
+        <div id = chmod onclick="location.href='/word'">
+            All Word
+        </div>
+    </div>
+    <form id="createWord">
+        <div class="inputWord">
+            <textarea class = "add" id="text" type="text" placeholder="추가할 단어를 적어주세요" cols="20"></textarea>
+        </div>
+        <div class="inputWord">
+            <textarea class = "add-1" id="category" type="text" placeholder="단어의 카테고리를 적어주세요" cols="20"></textarea>
+            <button type = "submit" class="submit" onclick="location.reload">등록</button>
+        </div>
+    </form>
+    
+    <div class = wordlist>
+        <% arr.forEach(catego => { %>
+            <div class = category>
+                <%=catego%>
+            </div>
+            <div class = showWord>
+                [Show Word]
+            </div>
+            <p class = words1>
+            </p> 
+            
+        <% }) %>
+    </div>
+    <script>
+        function checkSlash(str){
+            if(str.indexOf('/')!=-1){
+                return true;
+            }
+            else
+                return false;            
+        }
+
+        $(function () {
+            $("#createWord").submit((event)=>{
+                event.preventDefault();
+                const text = $("#text").val();
+                const category = $("#category").val();
+                if(!checkSlash(text) && !checkSlash(category)){
+                    $.ajax({
+                        url: "/word/",
+                        type: "POST",
+                        data: {text, category},
+                    }).done(() => {
+                        location.reload();
+                    }).fail((request, status, error)=>{
+                        alert(request.responseText);
+                    });
+                }
+                else
+                    alert("Stop Using Slash");
+            })
+
+            // $(".words").click((event)=>{
+            //     const ct = event.target.previousElementSibling.innerText;
+            //     console.log(ct);
+            //     $.ajax({
+            //         url: "/search/category/"+ct,
+            //         type: "GET",
+            //         dataType: "json"
+            //     }).done((json)=>{
+            //         json.forEach(result => {
+            //             console.log(result);
+            //             event.target.nextElementSibling.innerHTML+=(result.text+'&nbsp;');
+            //         });
+            //     }).fail((request,status,error)=>{
+            //         alert(request.responseTest);
+            //     })
+            // })
+            $(".showWord").click((event)=>{
+                const ct = event.target.previousElementSibling.innerText;
+                console.log(ct);
+                $.ajax({
+                    url: "/search/category/"+ct,
+                    type: "GET",
+                    dataType: "json"
+                }).done((json)=>{
+                    event.target.nextElementSibling.innerHTML = '';
+                    json.forEach(result => {
+                        console.log(result);
+                        event.target.nextElementSibling.innerHTML+=(result.text+'&nbsp;'+',');
+                    });
+                }).fail((request,status,error)=>{
+                    alert(request.responseText);
+                })
+            })
+        })
+    </script>
+</body>
+</html>

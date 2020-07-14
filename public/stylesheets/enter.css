@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+body{
+    background: linear-gradient(90deg, rgba(230,205,237,1) 0%, rgba(255,247,243,1) 10%, rgba(230,205,237,1) 20%, rgba(189,214,236,1) 30%, rgba(189,214,236,1) 40%, rgba(230,205,237,1) 50%, rgba(230,205,237,1) 70%, rgba(189,214,236,1) 76%, rgba(230,205,237,1) 83%, rgba(230,205,237,1) 91%, rgba(189,214,236,1) 94%, rgba(230,205,237,1) 98%);
+}
+.title{
+    color: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    margin-top: 30vh;
+    font-size: 9vh;
+    font-family: 'Montserrat', sans-serif;
+}
+.content{
+    margin-left: 35vw;
+    margin-top: 20vh;
+}
+#password{
+    border: 0;
+    border-bottom: 1px solid gray;
+    box-shadow: none;
+    background-color: transparent;
+    background-clip: padding-box;
+    outline: 0;
+    font-size: 20px;
+    width: 40%;
+}
