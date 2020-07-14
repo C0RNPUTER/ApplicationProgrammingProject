@@ -1,7 +1,8 @@
 const WordModel = require('../models/word');
 const mongoose = require('mongoose');
 const Word = require('../models/word');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const list = (req, res) => {
     WordModel.find((err, result) => {
@@ -60,12 +61,13 @@ const showEnterance = (req, res) => {
 
 const checkPasswd = (req, res) => {
     const password = req.body.password;
-    const key = "나를 죽이지 못하는 고통은 나를 더 강하게 해준다";
+    const key = process.env.ENTRANCE_KEY;
+    console.log(process.env.ENTRANCE_KEY);
     if (key.localeCompare(password)) {
         return res.status(500).send("Wrong Password");
     }
     else {
-        const token = jwt.sign("Not Gay", "KingDefense")
+        const token = jwt.sign(process.env.JWT_SUBJECT, process.env.JWT_KEY)
         res.cookie("token", token, { httpOnly: true });
         res.status(201).end();
     }
@@ -73,7 +75,7 @@ const checkPasswd = (req, res) => {
 
 const checkAuth = (req, res, next) => {
     const token = req.cookies.token;
-    const key = jwt.sign("Not Gay", "KingDefense");
+    const key = jwt.sign(process.env.JWT_SUBJECT, process.env.JWT_KEY);
     console.log(token, key)
     
     if (key.localeCompare(token)) {
